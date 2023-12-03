@@ -8,11 +8,11 @@ hero:
   tagline: 小而不凡
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: 快速开始
+      link: /guide/getting-started
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: 在线体验
+      link: https://stackblitz.com/edit/gmalertdemo?file=script.js
   image:
     src: /logo.webp
     alt: GmAlert
