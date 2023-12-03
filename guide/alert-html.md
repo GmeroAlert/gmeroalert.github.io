@@ -1,5 +1,5 @@
 <script setup>
-import { alert,message } from 'gmalert'
+import { alert,message } from '../components/gmalert.esm.js'
 import GmBtn from '../components/GmBtn.vue'
 import BtnGroup from '../components/BtnGroup.vue'
 const $input = document.createElement('input')

@@ -10,9 +10,6 @@ dependencies:
     version: 1.69.5
 
 devDependencies:
-  gmalert:
-    specifier: ^1.0.4
-    version: 1.0.4
   vitepress:
     specifier: 1.0.0-rc.31
     version: 1.0.0-rc.31(@algolia/client-search@4.20.0)(sass@1.69.5)(search-insights@2.11.0)
@@ -880,10 +877,6 @@ packages:
     engines: {node: '>= 6'}
     dependencies:
       is-glob: 4.0.3
-
-  /gmalert@1.0.4:
-    resolution: {integrity: sha512-0pPeZadzn+L12MunhPfouMVPO4JfL8He9L1ahfk7LY1CdJORn5MtBou1E5aMzrOHGNnPMyKkAF4OqStlZnqaIw==}
-    dev: true
 
   /hast-util-from-parse5@8.0.1:
     resolution: {integrity: sha512-Er/Iixbc7IEa7r/XLtuG52zoqn/b3Xng/w6aZQ0xGVxzhw5xUFxcRqdPzP6yFi/4HBYRaifaI5fQ1RH8n0ZeOQ==}

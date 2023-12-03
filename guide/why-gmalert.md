@@ -1,7 +1,7 @@
 # 为什么选择GmAlert
 
 <script setup>
-import { alert,message,notice } from 'gmalert'
+import { alert,message,notice } from '../components/gmalert.esm.js'
 import GmBtn from '../components/GmBtn.vue'
 </script>
 

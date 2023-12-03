@@ -60,7 +60,7 @@ import { alert, information, message, notice } from 'gmalert'
 ### Alert
 
 <script setup>
-import { alert,message,notice,information } from 'gmalert'
+import { alert,message,notice,information } from '../components/gmalert.esm.js'
 import GmBtn from '../components/GmBtn.vue'
 import BtnGroup from '../components/BtnGroup.vue'
 </script>
