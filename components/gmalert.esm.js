@@ -64,9 +64,9 @@ const viewBox = `viewBox="0 0 24 24"`;
 const styles = `style="width:1em;height:1em;vertical-align:baseline"`;
 const svgLoading = `<svg class="${cn('ani-turn')}" ${viewBox} ${styles}><path d="M1,12A11,11,0,0,0,12,23h0A11,11,0,0,0,12,1" style="fill:none;stroke:#1890ff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px"/><path d="M18.5,12A6.5,6.5,0,1,0,12,18.5h0" style="fill:none;stroke:#1890ff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px"/></svg>`;
 
-// info, warning, error, success, loading
+// info, warn, error, success, loading
 const Icons = [`<svg ${viewBox} ${styles}><circle cx="12" cy="12" r="12" style="fill:#29abe2"/><path d="M12,17.5a1,1,0,0,1-1-1v-5h-.5a1,1,0,0,1,0-2H12a1,1,0,0,1,1,1v6A1,1,0,0,1,12,17.5Z" style="fill:#fff"/><path d="M14,18.5H10a1,1,0,0,1,0-2h4a1,1,0,0,1,0,2Z" style="fill:#fff"/><circle cx="12" cy="6" r="1.5" style="fill:#fff"/></svg>`, `<svg ${viewBox} ${styles}><circle cx="12" cy="12" r="12" style="fill:#faad14"/><path d="M12,19.5A1.5,1.5,0,1,0,10.5,18,1.5,1.5,0,0,0,12,19.5Z" style="fill:#fff;fill-rule:evenodd"/><path d="M12,14a1.5,1.5,0,0,1-1.5-1.5v-7a1.5,1.5,0,0,1,3,0v7A1.5,1.5,0,0,1,12,14Z" style="fill:#fff"/></svg>`, `<svg ${viewBox} ${styles}><circle cx="12" cy="12" r="12" style="fill:#e06968"/><path d="M16,8,8,16" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px"/><path d="M8,8l8,8" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px"/></svg>`, `<svg ${viewBox} ${styles}><path d="M12,.5l3.18,2.2h3.93l1.21,3.55,3.18,2.2L22.28,12l1.22,3.55-3.18,2.2L19.11,21.3H15.18L12,23.5,8.82,21.3H4.89L3.68,17.75.5,15.55,1.72,12,.5,8.45l3.18-2.2L4.89,2.7H8.82Z" style="fill:#52c41a;stroke:#52c41a;stroke-linecap:round;stroke-linejoin:round"/><path d="M7.5,12l3,3,6-6" style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px"/></svg>`, svgLoading];
-const types = ['info', 'warning', 'error', 'success', 'loading'];
+const types = ['info', 'warn', 'error', 'success', 'loading'];
 function SvgIcon(type, className = '') {
   const index = types.indexOf(type);
   const svg = Icons[index] ?? '';
@@ -77,7 +77,7 @@ function baseCn(dense, className, extClassName) {
   return `class="${cn('aniicon')} ${cn(className)} ${dense ? cn('dense') : ''} ${extClassName}"`;
 }
 function SuccessIcon(dense = false, className = '') {
-  return `<div ${baseCn(dense, 'success-icon', className)}><div class="${cn('success-line')} ${cn('line-tip')}"></div><div class="${cn('success-line')} ${cn('line-long')}"></div><div class="${cn('success-ring')}"></div><div class="${cn('success-fix')}"></div></div>`;
+  return `<div ${baseCn(dense, 'ok-icon', className)}><div class="${cn('ok-line')} ${cn('line-tip')}"></div><div class="${cn('ok-line')} ${cn('line-long')}"></div><div class="${cn('ok-ring')}"></div><div class="${cn('ok-fix')}"></div></div>`;
 }
 function ErrorIcon(dense = false, className = '') {
   return `<div ${baseCn(dense, 'err-icon', className)}><div class="${cn('err-r')}"><div class="${cn('err-ll')}"></div><div class="${cn('err-lr')}"></div></div></div>`;
@@ -97,7 +97,7 @@ function AnimatedIcon(type, dense = false, className = '') {
       return SuccessIcon(dense, className);
     case 'error':
       return ErrorIcon(dense, className);
-    case 'warning':
+    case 'warn':
       return WarnIcon(dense, className);
     case 'info':
       return InfoIcon(dense, className);
@@ -234,12 +234,15 @@ function getArgs(args) {
           firstStr = true;
         }
         break;
+      case 'number':
+        result.timeout = arg;
+        break;
       case 'object':
         Object.assign(result, arg);
         break;
     }
   };
-  for (let index = 0; index < 3; index++) {
+  for (let index = 0; index < 4; index++) {
     const element = args[index];
     element && assignArg(element);
   }
@@ -289,10 +292,10 @@ function GmAlert(props) {
   };
   const close = status => {
     props.onClose();
-    changeAnimation($wrapper, cn('alert-hide'));
+    changeAnimation($wrapper, cn('alert-out'));
     return new Promise(resolve => {
       animationendHandle($wrapper, e => {
-        if (e === cn('alert-hide')) {
+        if (e === cn('alert-out')) {
           $wrapper.remove();
           props.onClosed(status);
           resolve();
@@ -334,16 +337,16 @@ function GmMessage(props) {
   $main.innerHTML = `${icon}<div class=${cn('msg-content')}>${props.content}</div>`;
   const open = () => {
     getMessageContainer().append($wrapper);
-    changeAnimation($wrapper, cn('msg-movein'));
+    changeAnimation($wrapper, cn('alert-in'));
   };
   const close = status => {
     props.onClose();
     $main.style.maxHeight = `${$main.offsetHeight}px`;
-    changeAnimation($wrapper, cn('msg-moveout'));
-    changeAnimation($main, cn('msg-out'));
+    changeAnimation($wrapper, cn('msg-out'));
+    changeAnimation($main, cn('msg-close'));
     return new Promise(resolve => {
       animationendHandle($wrapper, e => {
-        if (e === cn('msg-moveout')) {
+        if (e === cn('msg-out')) {
           $wrapper.remove();
           props.onClosed(status);
           resolve();
@@ -364,29 +367,21 @@ function GmNotice(props) {
   const $wrapper = newDiv(cn('notice'));
   $wrapper.innerHTML = `<div class="${cn('notice-main')}">${icon}\
   <div class="${cn('notice-content')}">${props.content}</div></div>`;
-  animationendHandle($wrapper, animationName => {
-    if (animationName === cn('open')) {
-      changeStyle($wrapper, [`opacity:1`, `animation-name:${cn('notice-movein')}`]);
-    }
-    if (animationName === cn('notice-moveout')) {
-      changeAnimation($wrapper, cn('close'));
-    }
-  });
   const open = () => {
     getNoticeContainer().prepend($wrapper);
-    changeStyle($wrapper, [`max-height:${$wrapper.offsetHeight + 10}px`]);
+    changeStyle($wrapper, [`--mh:${$wrapper.offsetHeight + 10}px`]);
     changeAnimation($wrapper, cn('open'));
     setTimeout(() => {
       const $icon = $wrapper.querySelector(`.${cn('notice-icon')}`);
       if ($icon) {
         $icon.style.opacity = '1';
       }
-    }, 400);
+    }, 300);
   };
   const close = status => {
     props.onClose();
+    changeAnimation($wrapper, cn('close'));
     return new Promise(resolve => {
-      changeAnimation($wrapper, cn('notice-moveout'));
       animationendHandle($wrapper, animationName => {
         if (animationName === cn('close')) {
           $wrapper.remove();
@@ -404,13 +399,14 @@ function GmNotice(props) {
 }
 const notice = /*#__PURE__*/MakeMsg(GmNotice, 0);
 
-const ColorMap = {
-  info: '#409eff',
-  success: '#67c23a',
-  warning: '#e6a23c',
-  error: '#f56c6c'
-};
 function GmInformation(props) {
+  const ColorMap = {
+    info: '#409eff',
+    success: '#67c23a',
+    warn: '#e6a23c',
+    error: '#f56c6c',
+    loading: '#1890ff'
+  };
   const color = ColorMap[props.type] || ColorMap.info;
   const $wrapper = newDiv(cn('info'));
   $wrapper.innerHTML = `<div class="${cn('info-header')}"><div class="${cn('info-status')}" style="background:${color};"></div><span style="margin-right:auto;font-weight:600">${props.headerLeft || '公告'}</span><span style="font-size:.875em;opacity:.7">${props.headerRight || ''}</span>${props.hideClose ? '' : CloseIcon(cn('info-close'))}</div>` + `<div class="${cn('info-content')}">${props.content}</div>`;
@@ -420,9 +416,9 @@ function GmInformation(props) {
   const close = status => {
     props.onClose();
     return new Promise(resolve => {
-      changeAnimation($wrapper, cn('info-move-out'));
+      changeAnimation($wrapper, cn('info-out'));
       animationendHandle($wrapper, e => {
-        if (e === cn('info-move-out')) {
+        if (e === cn('info-out')) {
           $wrapper.remove();
           props.onClosed(status);
           resolve();

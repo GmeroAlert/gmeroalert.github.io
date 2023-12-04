@@ -9,7 +9,7 @@
 ```ts
 export interface MsgPropsFull {
   content: string
-  type: 'success' | 'error' | 'warning' | 'info' | 'loading'
+  type: 'success' | 'error' | 'warn' | 'info' | 'loading'
   timeout?: number // 超时消失
   text?: string // alert 和 information 独有
   headerLeft?: string // information 独有
@@ -28,7 +28,7 @@ export interface MsgPropsFull {
 我们通过对传入的参数进行类型检测，来实现最简化的调用模式，以下的调用方式都是支持的
 
 ```js
-Gmal.alert("hahaha")
+Gmal.alert("hahaha", 5000)
 Gmal.alert("hahaha","error")
 Gmal.alert("hahaha",{
   timeout: 1500,

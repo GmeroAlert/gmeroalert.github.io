@@ -63,6 +63,18 @@ import { alert, information, message, notice } from 'gmalert'
 import { alert,message,notice,information } from '../components/gmalert.esm.js'
 import GmBtn from '../components/GmBtn.vue'
 import BtnGroup from '../components/BtnGroup.vue'
+
+let oneLoad = false
+
+const onLoad = () => {
+  if (oneLoad) return
+  oneLoad = true
+  const load = notice('等一下，快出来了', 'loading', {
+  onClosed() {message('啊，舒服了')}})
+  setTimeout(() => {
+    load.close().then(() => {oneLoad = false})
+  }, 4000)
+}
 </script>
 
 <BtnGroup>
@@ -123,28 +135,37 @@ Gmal.message('oops..', 'error')
 ### Notice
 
 <BtnGroup>
-    <GmBtn :onClick="()=>{notice('怎么了啊')}">Notice 1</GmBtn>
-    <GmBtn :onClick="()=>{notice('警告你一次', 'warning')}">Notice 2</GmBtn>
+    <GmBtn :onClick="()=>{notice('成功解决难题')}">Notice 1</GmBtn>
+    <GmBtn :onClick="()=>{notice('警告你一次', 'warn')}">Notice 2</GmBtn>
+    <GmBtn :onClick="onLoad">Notice 2</GmBtn>
 </BtnGroup>
 
 ::: details 代码
 ```js
-Gmal.notice('怎么了啊')
-Gmal.notice('警告你一次', 'warning')
+Gmal.notice('成功解决难题')
+Gmal.notice('警告你一次', 'warn')
+const load = Gmal.notice('等一下，快出来了', 'loading', {
+  onClosed() {
+    Gmal.message('啊，舒服了')
+  }
+})
+setTimeout(() => {
+  load.close()
+}, 4000)
 ```
 :::
 
 ### Infomation
 
 <BtnGroup>
-    <GmBtn :onClick="()=>{information('怎么了啊')}">Infomation 1</GmBtn>
-    <GmBtn :onClick="()=>{information('警告你一次', 'warning')}">Infomation 2</GmBtn>
+    <GmBtn :onClick="()=>{information('倒计时五秒', 5000)}">Infomation 1</GmBtn>
+    <GmBtn :onClick="()=>{information('infomation', 'info')}">Infomation 2</GmBtn>
 </BtnGroup>
 
 ::: details 代码
 ```js
-Gmal.information('怎么了啊')
-Gmal.information('警告你一次', 'warning')
+Gmal.information('怎么了啊', 5000)
+Gmal.information('infomation', 'info')
 ```
 :::
 

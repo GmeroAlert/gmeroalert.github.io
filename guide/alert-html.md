@@ -2,10 +2,10 @@
 import { alert,message } from '../components/gmalert.esm.js'
 import GmBtn from '../components/GmBtn.vue'
 import BtnGroup from '../components/BtnGroup.vue'
-const $input = document.createElement('input')
-$input.classList.add('gm-input')
+const input = document.createElement('input')
+input.classList.add('gm-input')
 const handleInput = () => {
-    const value = $input.value.trim()
+    const value = input.value.trim()
     if (value) {
         message("你输入了 "+value)
     } else {
@@ -14,7 +14,7 @@ const handleInput = () => {
 }
 const inputAlert = () => {
     alert('OK', {
-        html: $input,
+        html: input,
         showConfirm: true,
         showCancel: true,
         onClosed(code){
@@ -55,7 +55,9 @@ const inputAlert = () => {
 </BtnGroup>
 
 ```ts
-Gmal.alert('OK', {html: '<div style="color:red;font-size:18px;">HaHaHa</div>'})
+Gmal.alert('OK', {
+    html: '<div style="color:red;font-size:18px;">HaHaHa</div>'
+    })
 ```
 
 ## 以HTMLElement的方式使用
