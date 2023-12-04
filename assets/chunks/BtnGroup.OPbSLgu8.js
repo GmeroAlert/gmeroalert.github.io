@@ -1,1 +1,0 @@
-import{_ as o,o as r,c as s,r as t}from"./framework.oh-BXy59.js";const c={},n={class:"btn-group"};function a(e,_){return r(),s("div",n,[t(e.$slots,"default")])}const d=o(c,[["render",a]]);export{d as B};
