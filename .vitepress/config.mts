@@ -10,6 +10,7 @@ export default defineConfig({
   head: [
     // ['script', {src:'/js/gmalert-bundle.min.js'}],
     ['link', { rel: 'stylesheet', href: '/gmalert.min.css' }],
+    ['link',{ rel: 'icon', href: '/favicon.ico' }]
   ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
