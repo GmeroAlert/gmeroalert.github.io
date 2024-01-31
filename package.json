@@ -14,10 +14,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "vitepress": "1.0.0-rc.31",
-    "vue": "^3.3.9"
+    "vitepress": "1.0.0-rc.40",
+    "vue": "^3.4.15"
   },
   "dependencies": {
-    "sass": "^1.69.5"
+    "sass": "^1.70.0"
   }
 }

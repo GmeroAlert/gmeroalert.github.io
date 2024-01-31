@@ -31,9 +31,9 @@ function setMsgCount($el, count) {
   });
 }
 const getContainer = () => {
-  let $root = document.querySelector(`.gmal-box`);
+  let $root = document.querySelector(`.gmal`);
   if (!$root) {
-    $root = newDiv(cn('box'));
+    $root = newDiv('gmal');
     document.body.append($root);
   }
   return $root;
@@ -58,6 +58,19 @@ function changeStyle(el, arr) {
   const original = el.style.cssText.split(';');
   original.pop();
   el.style.cssText = `${original.concat(arr).join(';')};`;
+}
+
+// 用于设置滚动条
+function bodyScroll(lock = true) {
+  const $body = document.body;
+  if (lock) {
+    // set padding
+    $body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`;
+    $body.style.overflow = 'hidden';
+  } else {
+    $body.style.overflow = '';
+    $body.style.paddingRight = '';
+  }
 }
 
 const viewBox = `viewBox="0 0 24 24"`;
@@ -131,6 +144,8 @@ class Msg {
   }
   fire(conf) {
     const oMsg = this.mkMsg(conf);
+
+    // 非loading类型才会设置定时
     if (conf.type !== 'loading') {
       this.sT(oMsg, conf?.timeout || this.timeout);
     }
@@ -143,15 +158,15 @@ class Msg {
     const {
       $el
     } = oMsg;
-    let p = oMsg.progress;
-    p ??= this.mkP(oMsg, timeout);
-    p.reset();
+    const p = this.mkP(oMsg, timeout);
+    p.resume();
     $el.onmouseenter = p.pause;
     $el.onmouseleave = p.resume;
   }
 
   // 设置进度
   mkP(oMsg, timeout) {
+    oMsg.progress?.remove();
     const {
       $el
     } = oMsg;
@@ -171,14 +186,13 @@ class Msg {
     const resume = () => {
       changeStyle($progressBar, ['width:0', `transition:width ${timeout * get()}ms linear`]);
     };
-    const reset = () => {
-      changeStyle($progressBar, ['width:100%', 'transition:none']);
-      resume();
+    const remove = () => {
+      $progress.remove();
     };
     return oMsg.progress = {
       pause,
       resume,
-      reset
+      remove
     };
   }
 
@@ -270,8 +284,10 @@ function Button(text, onClick) {
   return $btn;
 }
 function GmAlert(props) {
+  const $box = newDiv(cn('alert-box'));
   const $wrapper = newDiv(cn('alert'));
   const icon = AnimatedIcon(props.type, false, cn('alert-icon'));
+  $box.append($wrapper);
   $wrapper.innerHTML = `${icon}<div class="${cn('alert-title')}">${props.content}</div>`;
   if (props.text || props.html) {
     const $text = newDiv(cn('alert-content'));
@@ -288,7 +304,8 @@ function GmAlert(props) {
   }
   const $root = getContainer();
   const open = () => {
-    $root.append($wrapper);
+    bodyScroll();
+    $root.append($box);
   };
   const close = status => {
     props.onClose();
@@ -296,12 +313,24 @@ function GmAlert(props) {
     return new Promise(resolve => {
       animationendHandle($wrapper, e => {
         if (e === cn('alert-out')) {
-          $wrapper.remove();
+          $box.remove();
+          if (!document.querySelector(`.${cn('alert')}`)) {
+            bodyScroll(false);
+          }
           props.onClosed(status);
           resolve();
         }
       });
     });
+  };
+  $box.onclick = e => {
+    if (props.hideClose) {
+      return;
+    }
+    if (e.target === $box) {
+      props.onClose();
+      close(0);
+    }
   };
   if (props.showCancel || props.showConfirm) {
     const $buttons = newDiv(cn('alert-btn-group'));
